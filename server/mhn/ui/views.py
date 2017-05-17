@@ -83,14 +83,20 @@ def dashboard():
 @ui.route('/attacks/', methods=['GET'])
 @login_required
 def get_attacks():
+    api_key=ApiKey.query.filter_by(user_id=current_user.id).first()
+    sens=Sensor.query(Sensor.uuid).filter_by(api_key).all();
     clio = Clio()
     options = paginate_options(limit=10)
     options['order_by'] = '-timestamp'
+    totals=0
+    for sen in sens:
+    totals = totals + clio.session.count(sen)
+
     total = clio.session.count(**request.args.to_dict())
     sessions = clio.session.get(
             options=options, **request.args.to_dict())
     sessions = mongo_pages(sessions, total, limit=10)
-    return render_template('ui/attacks.html', attacks=sessions,
+    return render_template('ui/attacks.html', total=totals, attacks=sessions,
                            sensors=Sensor.query, view='ui.get_attacks',
                            get_flag_ip=get_flag_ip, get_sensor_name=get_sensor_name,
                            **request.args.to_dict())

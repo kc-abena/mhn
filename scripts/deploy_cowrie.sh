@@ -18,6 +18,7 @@ apt-get install -y python
 
 server_url=$1
 deploy_key=$2
+api_key=$3
 
 wget $server_url/static/registration.txt -O registration.sh
 chmod 755 registration.sh

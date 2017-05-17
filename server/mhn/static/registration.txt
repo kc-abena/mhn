@@ -9,7 +9,9 @@ fi
 
 server_url=$1
 deploy_key=$2
-honeypot=$3
+api_key=$3
+honeypot=$4
+
 hostname=$(hostname)
 
 if [ -f /etc/debian_version ]; then
@@ -27,8 +29,8 @@ fi
 
 
 curl -s -X POST -H "Content-Type: application/json" -d "{
-	\"name\": \"${hostname}-${honeypot}\", 
-	\"hostname\": \"$hostname\", 
+	\"name\": \"${hostname}-${honeypot}\",
+	\"hostname\": \"$hostname\",
 	\"deploy_key\": \"$deploy_key\",
 	\"honeypot\": \"$honeypot\"
 }" $server_url/api/sensor/ > /tmp/deploy.json

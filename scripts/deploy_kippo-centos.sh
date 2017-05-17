@@ -11,6 +11,7 @@ fi
 
 server_url=$1
 deploy_key=$2
+api_key=$3
 
 wget $server_url/static/registration.txt -O registration.sh
 sed -i s/apt-get/yum/ registration.sh
