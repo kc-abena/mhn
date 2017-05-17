@@ -68,7 +68,7 @@ def dashboard():
     top_sensor = clio.session.top_sensor(top=5, hours_ago=24)
     # TOP 5 sigs
     freq_sigs = clio.hpfeed.top_sigs(top=5, hours_ago=24)
-    
+
     return render_template('ui/dashboard.html',
                            attackcount=attackcount,
                            top_attackers=top_attackers,
@@ -162,7 +162,8 @@ def deploy_mgmt():
         script = Script.query.get(script_id)
     return render_template(
             'ui/script.html', scripts=Script.query.order_by(Script.date.desc()),
-            script=script)
+            script=script,
+            apikey=ApiKey.query.filter_by(user_id=current_user.id).first())
 
 @ui.route('/honeymap/', methods=['GET'])
 @login_required
@@ -173,7 +174,7 @@ def honeymap():
 @login_required
 def settings():
     return render_template(
-        'ui/settings.html', 
+        'ui/settings.html',
         users=User.query.filter_by(active=True),
         apikey=ApiKey.query.filter_by(user_id=current_user.id).first()
     )
@@ -202,7 +203,7 @@ def get_credentials_payloads(clio):
 @login_required
 def graph_passwords():
     clio=Clio()
-    
+
     bar_chart = pygal.Bar(style=LightColorizedStyle,show_x_labels=True, config=PYGAL_CONFIG)
     bar_chart.title = "Kippo/Cowrie Top Passwords"
     clio=Clio()
@@ -216,7 +217,7 @@ def graph_passwords():
 @login_required
 def graph_users():
     clio=Clio()
-    
+
     bar_chart = pygal.Bar(style=LightColorizedStyle,show_x_labels=True, config=PYGAL_CONFIG)
     bar_chart.title = "Kippo/Cowrie Top Users"
     clio=Clio()
@@ -231,7 +232,7 @@ def graph_users():
 @login_required
 def graph_combos():
     clio=Clio()
-    
+
     bar_chart = pygal.Bar(style=LightColorizedStyle,show_x_labels=True, config=PYGAL_CONFIG)
     bar_chart.title = "Kippo/Cowrie Top User/Passwords"
     clio=Clio()
@@ -257,12 +258,12 @@ def top_kippo_cowrie_attackers(clio):
 @login_required
 def graph_top_attackers():
     clio=Clio()
-    
+
     bar_chart = pygal.Bar(style=LightColorizedStyle,show_x_labels=True, config=PYGAL_CONFIG)
     bar_chart.title = "Kippo/Cowrie Top Attackers"
     clio=Clio()
     top_attackers = top_kippo_cowrie_attackers(clio)
-    print top_attackers    
+    print top_attackers
     for attacker in top_attackers:
         bar_chart.add(str(attacker['source_ip']), attacker['count'])
 
