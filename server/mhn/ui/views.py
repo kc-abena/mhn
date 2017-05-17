@@ -156,6 +156,7 @@ def add_sensor():
 @login_required
 def deploy_mgmt():
     script_id = request.args.get('script_id')
+    apkey = ApiKey.query.filter_by(user_id=current_user.id).first()
     if not script_id or script_id == '0':
         script = Script(name='', notes='', script='')
     else:
@@ -163,7 +164,7 @@ def deploy_mgmt():
     return render_template(
             'ui/script.html', scripts=Script.query.order_by(Script.date.desc()),
             script=script,
-            apikey=ApiKey.query.filter_by(user_id=current_user.id).first())
+            apikey=apkey)
 
 @ui.route('/honeymap/', methods=['GET'])
 @login_required
