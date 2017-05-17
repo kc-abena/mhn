@@ -90,7 +90,7 @@ def get_attacks():
     options['order_by'] = '-timestamp'
     totals=0
     for sen in sens:
-    totals = totals + clio.session.count(sen)
+        totals = totals + clio.session.count(sen)
 
     total = clio.session.count(**request.args.to_dict())
     sessions = clio.session.get(
