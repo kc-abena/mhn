@@ -88,13 +88,9 @@ def get_attacks():
     clio = Clio()
     options = paginate_options(limit=10)
     options['order_by'] = '-timestamp'
-    totals=0
-    for sen in sens:
-        totals = totals + clio.session.count(sen)
-
-    total = clio.session.count(**request.args.to_dict())
+    total = clio.session.count(sens)
     sessions = clio.session.get(
-            options=options, **request.args.to_dict())
+            options=options, sens)
     sessions = mongo_pages(sessions, total, limit=10)
     return render_template('ui/attacks.html', total=totals, attacks=sessions,
                            sensors=Sensor.query, view='ui.get_attacks',
